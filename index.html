@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <title>Tedium | An Offbeat Digital Newsletter</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Tedium is a twice-weekly offbeat digital newsletter that mines the depths of the long tail in search of obscurities. Dig in." />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />      
+        <script src="http://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+        <script>
+          tailwind.config = {
+                container: {
+                    center: true,
+                },
+                theme: {
+                    colors: {
+                    'tedium': '#b00c20',
+                    'tediumdark': '#900920',
+                    'red': '#b00c20',
+                    'blue': '#1fb6ff',
+                    'purple': '#7e5bef',
+                    'pink': '#ff49db',
+                    'orange': '#ff7849',
+                    'green': '#13ce66',
+                    'yellow': '#ffc82c',
+                    'gray-dark': '#666666',
+                    'gray-darkish': '#888888',
+                    'gray': '#cccccc',
+                    'gray-light': '#efefef',
+                    'black': '#000000',
+                    'white': '#ffffff',
+                    'mastodon': '#6161ff',
+                    'bluesky': '#0084ff',
+                    'twitter': '#999999'
+                },
+                backgroundImage: {
+                  "mobile-header": "url('https://backend.narrow.news/assets/4c052035-2294-4302-82ec-c1405ff8c2b9')",
+                  "desktop-header": "url('https://backend.narrow.news/assets/dc75265a-6d17-4c90-97a8-1412da294dfd')"
+                },
+                fontFamily: {
+                    sans: ['Besley', 'serif'],
+                    serif: ['Montserrat', 'sans-serif'],
+                },
+                extend: {
+                    gridTemplateColumns: {
+                        // Simple 16 column grid
+                        '16': 'repeat(16, minmax(0, 1fr))',
+                    },
+                    gridColumn: {
+                        'span-13': 'span 13 / span 13',
+                        'span-14': 'span 14 / span 14',
+                        'span-15': 'span 15 / span 15',
+                        'span-16': 'span 16 / span 16',
+                    },
+                    spacing: {
+                        '8xl': '96rem',
+                        '9xl': '128rem',
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                    },
+                    screens: {
+                        '3xl': '2000px',
+                    }
+                }
+            },
+            }
+        </script>
+        <style>
+            #heroVideo, #mosaicCanvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Ensures the video maintains aspect ratio */
+            }
+
+            #heroVideo {
+                z-index: 0; /* Make sure video is behind the canvas */
+            }
+
+            #mosaicCanvas {
+                z-index: 1; /* Canvas is in front of the video */
+                pointer-events: auto; /* Ensures the canvas can capture clicks */
+            }
+
+            #hoverbox {
+                width: 200px !important; /* Fixed width */
+                max-width: 200px !important; /* Ensure it doesn't exceed this width */
+                overflow: hidden; /* Prevent overflow */
+                white-space: normal; /* Allow text to wrap normally */
+            }
+
+        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <body>
+        <header class="relative flex flex-col h-screen justify-between items-center bg-gray-light overflow-hidden">
+            <div class="absolute w-full h-screen overflow-hidden">
+                <!-- Video background -->
+                <video class="absolute inset-0 object-cover w-full h-full" autoplay muted loop preload="auto" id="heroVideo" playsinline>
+                  <source src="compressed_background_video.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+            
+                <!-- Canvas overlay for grid -->
+                <canvas id="mosaicCanvas" class="absolute inset-0 mix-blend-hard-light"></canvas>
+
+                    <!-- Hoverbox -->
+                    <div id="hoverbox" class="relative p-4 bg-gray text-tedium font-bold transform transition-opacity duration-500 ease-in-out rounded-lg text-sm opacity-100 pointer-events-none w-[200px] max-w-[200px] overflow-hidden"></div>
+            </div>
+            
+            <space class="w-3/5 flex-grow">&nbsp;</space>
+            
+            <hero class="relative w-3/5 m-auto align-middle bg-tedium p-5 text-white max-w-screen-xl z-40">
+                <inner-hero class="flex flex-col w-full border border-white p-10 block align-middle">
+                    <h1 class="text-6xl leading-snug"><strong class="tracking-tighter">Tedium.</strong> <em>The newsletter all your other newsletters look up to.</em></h1>
+                    <p class="text-xl font-medium leading-8 text-white">Since 2015, Ernie Smith’s <strong>Tedium</strong> has been hunting for the end of the long tail, and we’ve yet to find it. But we’d sure love it if you followed us on our journey. Especially now that we’re ten friggin’ years old and we’re still using a <em>Street Fighter II</em> slogan as our subscribe button. Validate the use of obscure video game slang as a successful subscription strategy. Click the button.</p>
+                    <form class="w-full pt-8">
+                        <inputbox class="flex">
+                        <input type="email" type="email" placeholder="Your Freaking Email Address" class="form-input px-4 py-4 w-3/4 border-tediumdark">
+                        <button class="w-1/4 ml-5 hover:bg-blue-500 text-blue-700 font-bold italic uppercase hover:text-white py-4 px-4 border border-blue-500 hover:border-transparent bg-tediumdark">
+                            Shoryuken!
+                        </button>
+                        </inputbox>
+                        <div aria-hidden="true" class="emailoctopus-form-row-hp hidden">
+                            <input type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="nope">
+                        </div>
+                        <div class="emailoctopus-form-row-consent italic uppercase text-md font-medium text-center pt-4">
+                            <input type="checkbox" id="consent" name="consent">
+                            <label for="consent">Tedium can email me random bits of errata and rants about salsa jars. I am signing up for this.</label>
+                        </div>
+                        <div class="recaptcha-container" style="display: none;"></div>
+                    </form>
+                    <p class="width-auto align-middle mx-auto pt-4 mt-4 border-t-2 border-dashed border-white hidden md:inline-block"><em>(P.S. every single image in this header is clickable and leads to a long-form article. Try it!)</em></p>
+                </inner-hero>
+            </hero>
+            
+            <space class="w-3/5 flex-grow">&nbsp;</space>
+            
+            <bottom-tease class="w-1/3 m-auto align-bottom py-10 px-4 z-50">
+                <p class="text-center text-2xl text-tedium font-semibold">⬇ <i>Check out our latest attention ploys</i> ⬇</p>
+            </bottom-tease>
+        </header>              
+        <content class="relative flex flex-col pt-24 justify-between items-center bg-white overflow-hidden">
+            
+                <leadcontent class="h-[36rem] w-3/5 max-w-screen-3xl mb-10 relative flex items-center justify-center">
+                    <div class="absolute inset-0">
+                        <img src="https://images.tedium.co/uploads/tedium092224.gif" alt="Fallback Background" class="object-cover w-full h-full" />
+                    </div>
+                    <leadcopy class="w-3/5 bg-white z-40 p-5 block m-auto max-w-screen-lg">
+                        <inner-leadcopy class="w-full border border-tedium p-5 block m-auto text-center">
+                            <h5 class="uppercase text-center font-bold italic underline underline-offset-8 text-tedium">The Latest</h5>
+                            <h1 class="text-5xl leading-snug italic text-tedium font-semibold">Party In The Rear</h1>
+                            <p class="text-xl font-medium leading-8">Considering the legacy of rear-projection TVs, the most efficient route to a big-screen TV in the pre-LCD era.</p>
+                        </inner-leadcopy>
+                    </leadcopy>
+                </leadcontent>            
+                <innercontent class="w-3/5 m-auto pt-8 align-middle max-w-screen-2xl border-0 border-double border-t-4 border-gray border-b-4 min-h-screen overflow-visible">
+                    <innergrid class="grid grid-cols-4 gap-8 h-screen">
+                        <sidebar class="sticky top-0 pr-10 border-dotted border-gray border-r">
+                        <div class="is-carbon-ad">
+                            <script async="" type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CK7IT2JN&amp;placement=tediumco" id="_carbonads_js"></script>
+                        </div>
+                        <div class="post-social">
+                            <h5 class="uppercase text-center font-bold italic underline underline-offset-8 text-tedium py-5">Follow Us</h5>
+                            <a href="https://social.tedium.co/@tedium" class="block text-center px-8 py-3 my-2 text-lg font-bold text-white bg-mastodon hover:bg-green-700">
+                                <i class="fab fa-mastodon"></i> Mastodon
+                            </a>   
+                            <a href="https://bsky.app/profile/tedium.co" class="block text-center px-8 py-3 my-2 text-lg font-bold text-white bg-bluesky hover:bg-green-700">
+                                <i class="fab fa-bluesky"></i> Bluesky
+                            </a>   
+                            <a href="https://twitter.com/readtedium" class="block text-center px-8 py-3 my-2 text-lg font-bold text-white bg-twitter hover:bg-green-700">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <label class="subscribebox" for="subscribebox-toggle">
+                            <a href="https://twitter.com/readtedium" class="block text-center px-8 py-3 my-2 text-lg font-bold text-white bg-tedium hover:bg-green-700">
+                                <i class="fas fa-info-circle"></i> Subscribe
+                            </a>
+                            </label>          
+                        </div>
+                    </sidebar>                
+                <cards class="col-span-3 flex flex-col">
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+
+                    <card class="w-full bg-gray-darkish text-white grid grid-cols-3 gap-4 mb-10">
+                        <card-image >
+                            <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" />
+                        </card-image>
+                        <card-body class="col-span-2 p-4 pl-0">
+                            <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                            <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                            <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                            </card-inner>
+                        </card-body>
+                    </card>
+                </cards>
+            </innergrid>
+            </innercontent>
+            <teasers class="w-3/5 max-w-screen-3xl my-10 gap-4 relative items-center justify-center">
+                <teaser-header class="p-10 text-center">
+                    <h5 class="uppercase text-center font-bold italic underline underline-offset-8 text-tedium py-5"><i class="fa-solid fa-graduation-cap"></i> Instant Expert: Glass</h5>
+                    <p class="text-lg italic">Everything you ever wanted to know about glass,</p>
+                </teaser-header>
+                <teaser-cards class="grid grid-cols-3 gap-8 ">
+                <card class="w-full bg-gray-darkish text-white mb-10">
+                    <card-image >
+                        <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" class="w-full" />
+                    </card-image>
+                    <card-body class="w-4/5 p-4">
+                        <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                        <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                        <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                        </card-inner>
+                    </card-body>
+                </card>
+
+                <card class="w-full bg-gray-darkish text-white mb-10">
+                    <card-image>
+                        <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" class="w-full" />
+                    </card-image>
+                    <card-body class="w-4/5 p-4">
+                        <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                        <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                        <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                        </card-inner>
+                    </card-body>
+                </card>
+
+                <card class="w-full bg-gray-darkish text-white mb-10">
+                    <card-image >
+                        <img src="https://images.tedium.co/uploads/tedium092924.gif?h=270&fit=crop&w=405&crop=center&auto=format" class="w-full" />
+                    </card-image>
+                    <card-body class="w-4/5 p-4">
+                        <card-inner class="p-4 w-full border border-white block align-middle h-full">
+                        <h3 class="text-4xl leading-snug font-semibold italic">Entering The Fray</h3>
+                        <p class="text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras suscipit metus non velit tristique volutpat.</p>
+                        </card-inner>
+                    </card-body>
+                </card>
+                </teaser-cards>
+
+            </teasers>
+        </content>
+
+        <script>
+            const canvas = document.getElementById('mosaicCanvas');
+            const ctx = canvas.getContext('2d');
+            const video = document.getElementById('heroVideo');
+        
+            const cols = 15; // Number of columns
+            const rows = 20; // Number of rows
+            const totalTiles = cols * rows;
+        
+            let urls = []; // Array to store URLs and data from CSV
+        
+            // Function to parse CSV file and populate the 'urls' array
+            const parseCSV = async () => {
+                try {
+                    const response = await fetch('./output.csv');
+                    const data = await response.text();
+
+                    const rows = data.trim().split('\n').slice(1);
+                    urls = rows.map(row => {
+                        const [id, title, url, deck, shortDeck, imageUrl] = row.split('|'); // Ensure the delimiter is correct
+                        return { title, url, deck, shortDeck, imageUrl };
+                    });
+
+                    updateCanvasSize(); // Call this after URLs are loaded
+                } catch (error) {
+                    console.error('Error parsing CSV:', error);
+                }
+            };
+
+        
+            // Create a hoverbox element
+            const hoverbox = document.createElement('div');
+            hoverbox.className = 'absolute p-4 bg-gray text-tedium font-bold transform transition-opacity duration-300 ease-in-out rounded-lg text-sm opacity-0 pointer-events-none z-50';
+            document.body.appendChild(hoverbox);
+        
+            // Clickable area for grid items
+            canvas.addEventListener('click', (e) => {
+                const mouseX = e.clientX + (canvas.width - window.innerWidth) / 2;
+                const mouseY = e.clientY + (canvas.height - window.innerHeight) / 2;
+        
+                const clickedCol = Math.floor(mouseX / (canvas.width / cols));
+                const clickedRow = Math.floor(mouseY / (canvas.height / rows));
+                const tileIndex = clickedRow * cols + clickedCol;
+        
+                // If a valid tile is clicked, go to the URL
+                if (tileIndex >= 0 && tileIndex < urls.length) {
+                    window.location.href = urls[tileIndex].url;
+                }
+            });
+        
+            // Function to update canvas size
+            const updateCanvasSize = () => {
+                const videoAspect = video.videoWidth / video.videoHeight;
+                const windowAspect = window.innerWidth / window.innerHeight;
+        
+                // Set canvas dimensions based on video aspect ratio
+                if (videoAspect > windowAspect) {
+                    canvas.width = window.innerHeight * videoAspect; // Match height and adjust width
+                    canvas.height = window.innerHeight;
+                } else {
+                    canvas.height = window.innerWidth / videoAspect;
+                    canvas.width = window.innerWidth;
+                }
+        
+                drawGrid(-1); // Draw the grid after resizing without a hovered tile
+            };
+        
+            // Function to draw the grid
+            const drawGrid = (hoveredTileIndex) => {
+                const tileWidth = canvas.width / cols;
+                const tileHeight = canvas.height / rows;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const tileIndex = row * cols + col;
+
+                        // Set the base fill style
+                        ctx.fillStyle = 'rgba(255, 255, 255, .65)'; // Base tile color
+                        ctx.fillRect(col * tileWidth, row * tileHeight, tileWidth, tileHeight);
+
+                        // Apply hover effect if this tile is hovered
+                        if (tileIndex === hoveredTileIndex) {
+                            ctx.globalCompositeOperation = 'color-burn'; // Change to 'color-burn' if needed
+
+                            ctx.fillStyle = 'rgba(176, 12, 32, 1)'; // Color for hover effect
+                            ctx.fillRect(col * tileWidth, row * tileHeight, tileWidth, tileHeight);
+
+                            ctx.globalCompositeOperation = 'source-over'; 
+                        }
+                    }
+                }
+
+                // Draw a border around the hovered tile after all tiles have been drawn
+                if (hoveredTileIndex !== -1) {
+                    const row = Math.floor(hoveredTileIndex / cols);
+                    const col = hoveredTileIndex % cols;
+
+                    ctx.strokeStyle = 'rgba(176, 12, 32, 1)'; // Border color
+                    ctx.lineWidth = 1; // Set border width
+                    ctx.strokeRect(col * tileWidth, row * tileHeight, tileWidth, tileHeight);
+                }
+            };
+
+        
+            const escapeHTML = (str) => {
+                const div = document.createElement('div');
+                div.innerText = str;
+                return div.innerHTML;
+            };
+        
+            // Select the hero element
+            const hero = document.querySelector('hero');
+
+            // Function to handle hoverbox visibility
+            const handleHoverboxVisibility = (isVisible) => {
+                hoverbox.style.opacity = isVisible ? '1' : '0';
+            };
+
+            // Event listener for mouse enter on hero
+            hero.addEventListener('mouseenter', () => {
+                handleHoverboxVisibility(false); // Fade out the hoverbox
+            });
+
+            // Event listener for mouse leave on hero
+            hero.addEventListener('mouseleave', () => {
+                handleHoverboxVisibility(true); // Fade in the hoverbox if needed
+            });
+
+            // Existing hoverbox handling function
+            const handleHoverbox = (e, urlData) => {
+                // Update hoverbox content with your specified structure
+                hoverbox.innerHTML = `
+                    <h4 class="text-center block text-balance">${urlData.title}</h4>
+                    <p class="font-normal text-black text-center block text-balance">${escapeHTML(urlData.shortDeck)}</p>
+                `;
+
+                const hoverWidth = hoverbox.offsetWidth;
+                const hoverHeight = hoverbox.offsetHeight;
+
+                hoverbox.style.width = '200px'; // Set fixed width directly
+                hoverbox.style.maxWidth = '200px'; // Set max-width
+                hoverbox.style.whiteSpace = 'normal'; // Allow wrapping
+
+                const cursor = {
+                    x: e.clientX,
+                    y: e.clientY
+                };
+
+                const viewport = {
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                };
+
+                let position = {
+                    x: cursor.x + 10,
+                    y: cursor.y + 10
+                };
+
+                const bottomTease = document.querySelector('bottom-tease');
+                const bottomTeaseRect = bottomTease.getBoundingClientRect();
+
+                // Check for collisions with hero and bottom-tease elements
+                if (
+                    position.x + hoverWidth > hero.getBoundingClientRect().left &&
+                    position.x < hero.getBoundingClientRect().right &&
+                    position.y > hero.getBoundingClientRect().top &&
+                    position.y < hero.getBoundingClientRect().bottom
+                ) {
+                    position.x = cursor.x - hoverWidth - 10; // Adjust position to prevent overlap
+                }
+
+                if (
+                    position.x + hoverWidth > bottomTeaseRect.left &&
+                    position.x < bottomTeaseRect.right &&
+                    position.y > bottomTeaseRect.top &&
+                    position.y < bottomTeaseRect.bottom
+                ) {
+                    position.x = cursor.x - hoverWidth - 10; // Adjust position to prevent overlap
+                }
+
+                // Ensure hoverbox stays within viewport bounds
+                position.x = Math.max(10, Math.min(position.x, viewport.width - hoverWidth - 10));
+                position.y = Math.max(10, Math.min(position.y, viewport.height - hoverHeight - 10));
+
+                hoverbox.style.left = `${position.x}px`;
+                hoverbox.style.top = `${position.y}px`;
+                hoverbox.style.opacity = '1'; // Make hoverbox fully visible
+            };
+
+
+        
+            // Function to hide hoverbox
+            const hideHoverbox = () => {
+                hoverbox.style.transition = 'opacity 0.3s';  // Add transition for fade effect
+                hoverbox.style.opacity = '0';  // Fade out
+            };
+        
+            canvas.addEventListener('mousemove', (e) => {
+            // Get the adjusted mouse position
+            const mouseX = e.clientX + (canvas.width - window.innerWidth) / 2;
+            const mouseY = e.clientY + (canvas.height - window.innerHeight) / 2;
+
+            const clickedCol = Math.floor(mouseX / (canvas.width / cols));
+            const clickedRow = Math.floor(mouseY / (canvas.height / rows));
+            const tileIndex = clickedRow * cols + clickedCol;
+
+            // Get the bounding rectangle of the hero section
+            const heroRect = hero.getBoundingClientRect();
+            const isOverHero = (
+                e.clientX >= heroRect.left &&
+                e.clientX <= heroRect.right &&
+                e.clientY >= heroRect.top &&
+                e.clientY <= heroRect.bottom
+            );
+
+            // If mouse is over hero, clear grid highlight and hide hoverbox
+            if (isOverHero) {
+                drawGrid(-1); // Hide tile highlight
+                hideHoverbox(); // Hide hoverbox function ensures opacity is set to 0
+            } else {
+                // Check if tileIndex is within valid range
+                if (tileIndex >= 0 && tileIndex < urls.length) {
+                    drawGrid(tileIndex); // Draw grid and highlight the hovered tile
+                    const urlData = urls[tileIndex];
+                    handleHoverbox(e, urlData); // Update hoverbox with tile data
+                } else {
+                    drawGrid(-1); // Hide tile highlight if out of bounds
+                    hideHoverbox(); // Hide hoverbox
+                }
+            }
+        });
+
+            const getHoveredTileIndex = (e) => {
+                const tileWidth = canvas.width / cols;
+                const tileHeight = canvas.height / rows;
+
+                const mouseX = e.clientX - canvas.getBoundingClientRect().left;
+                const mouseY = e.clientY - canvas.getBoundingClientRect().top;
+
+                const col = Math.floor(mouseX / tileWidth);
+                const row = Math.floor(mouseY / tileHeight);
+
+                // Check if the calculated column and row are within bounds
+                if (col >= 0 && col < cols && row >= 0 && row < rows) {
+                    return row * cols + col; // Calculate the tile index
+                }
+
+                return -1; // Return -1 if no tile is hovered
+            };
+
+
+        
+            // Sync on load and on resize
+            window.addEventListener('load', parseCSV); // Parse CSV and load content
+            window.addEventListener('resize', updateCanvasSize);
+        </script>
+        
+        
+
+
+        
+    </body>
+</html>
